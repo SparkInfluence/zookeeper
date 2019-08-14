@@ -1,0 +1,17 @@
+{
+  "name": "sparkinfluence/zookeeper",
+  "description": "A client library for interacting with a zookeeper service",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "John Bloch",
+      "email": "john.bloch@wearewsd.com"
+    }
+  ],
+  "require": {
+    "php": ">7.2",
+    "ext-zookeeper": "*"
+  }
+}
