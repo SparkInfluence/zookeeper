@@ -3,6 +3,7 @@
 namespace SparkInfluence\Zookeeper;
 
 use SparkInfluence\Zookeeper\Exception\Exception;
+use Throwable;
 use Zookeeper as ZkExt;
 
 class Lock
@@ -37,7 +38,7 @@ class Lock
             }
 
             return $lock_key;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
@@ -83,7 +84,7 @@ class Lock
             }
             $this->zk->create($parent, '');
             return true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }
