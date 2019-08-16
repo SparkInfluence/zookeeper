@@ -16,6 +16,8 @@ class Zookeeper implements ZookeeperInterface
     /** @var string */
     private $basePath;
 
+    private static $instances = [];
+
     public function setZk(ZkExt $zk): Zookeeper
     {
         $this->zk = $zk;
@@ -185,6 +187,29 @@ class Zookeeper implements ZookeeperInterface
             throw new Exception(sprintf('%s is an invalid path!', $node), 3);
         }
         return '/' . trim(preg_replace('@//+@', '/', $node), '/');
+    }
+
+    /**
+     * Get or create a connection to zookeeper
+     *
+     * @param string $host
+     * @param callable|null $callback
+     * @param int $timeout
+     * @return Zookeeper
+     * @throws Throwable
+     */
+    public static function connection(string $host, ?callable $callback = null, int $timeout = 10000): self
+    {
+        $instance = self::$instances[$host] ?? false;
+        if (!$instance) {
+            $zk = new ZkExt();
+            $instance = new static($zk);
+            self::$instances[$host] = $instance;
+        }
+        if (!$instance->isConnected()) {
+            $instance->connect($host, $callback, $timeout);
+        }
+        return $instance;
     }
 
 }
