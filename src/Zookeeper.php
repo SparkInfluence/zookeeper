@@ -18,12 +18,6 @@ class Zookeeper implements ZookeeperInterface
 
     private static $instances = [];
 
-    public function setZk(ZkExt $zk): Zookeeper
-    {
-        $this->zk = $zk;
-        return $this;
-    }
-
     public function __construct(ZkExt $zk, string $basePath = '')
     {
         $this->zk = $zk;
