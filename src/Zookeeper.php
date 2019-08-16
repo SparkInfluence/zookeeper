@@ -171,7 +171,6 @@ class Zookeeper implements ZookeeperInterface
         // regex to find invalid characters
         $pattern = '/' .
             '[' . // Start range match
-            "\u{0}" . // Null character not allowed at all
             "\u{1}-\u{19}\u{7f}-\u{9f}" . // These don't display well, so zookeeper won't allow them
             "\u{d800}-\u{f8fff}\u{fff0}-\u{ffff}\u{f0000}-\u{fffff}" . // These following sequences are not allowed
             "\u{1fffe}-\u{1ffff}\u{2fffe}-\u{2ffff}\u{3fffe}-\u{3ffff}\u{4fffe}-\u{4ffff}" .
@@ -181,6 +180,7 @@ class Zookeeper implements ZookeeperInterface
             "]" . // Close range match
             "/";
         $node = preg_replace($pattern, '', $node);
+        $node = str_replace("\0", '', $node); // Now strip null bytes
         if (array_intersect(explode('/', trim($node, '/')), ['.', '..', 'zookeeper'])) {
             throw new Exception(sprintf('%s is an invalid path!', $node), 3);
         }
