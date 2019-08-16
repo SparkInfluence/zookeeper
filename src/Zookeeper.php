@@ -176,7 +176,7 @@ class Zookeeper implements ZookeeperInterface
         if (array_intersect(explode('/', trim($node, '/')), ['.', '..', 'zookeeper'])) {
             throw new Exception(sprintf('%s is an invalid path!', $node), 3);
         }
-        return '/' . trim($node, '/');
+        return '/' . trim(preg_replace('@//+@', '/', $node), '/');
     }
 
 }
