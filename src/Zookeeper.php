@@ -2,9 +2,7 @@
 
 namespace SparkInfluence\Zookeeper;
 
-use SparkInfluence\Zookeeper\Exception\ConnectionError;
-use SparkInfluence\Zookeeper\Exception\Exception;
-use SparkInfluence\Zookeeper\Exception\NodeError;
+use SparkInfluence\Zookeeper\Exception\{ConnectionError, Exception, NodeError};
 use Throwable;
 use Zookeeper as ZkExt;
 
