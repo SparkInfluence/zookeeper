@@ -13,6 +13,8 @@ class Zookeeper implements ZookeeperInterface
 
     /** @var ZkExt */
     private $zk;
+    /** @var string */
+    private $basePath;
 
     public function setZk(ZkExt $zk): Zookeeper
     {
@@ -20,9 +22,14 @@ class Zookeeper implements ZookeeperInterface
         return $this;
     }
 
-    public function __construct(ZkExt $zk = null)
+    public function __construct(ZkExt $zk, string $basePath = '')
     {
         $this->zk = $zk;
+        try {
+            $this->basePath = $this->formatNodePath($basePath);
+        } catch (Throwable $e) {
+            $this->basePath = '';
+        }
     }
 
     /**
@@ -160,6 +167,7 @@ class Zookeeper implements ZookeeperInterface
      */
     private function formatNodePath(string $node): string
     {
+        $node = trim($this->basePath, '/') . '/' . trim($node, '/');
         // regex to find invalid characters
         $pattern = '/' .
             '[' . // Start range match
