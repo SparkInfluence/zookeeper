@@ -27,11 +27,26 @@ class Lock
 
     public function lock(string $key, int $timeout = 0): ?string
     {
+        return $this->doLock($key, $timeout, static::TYPE_EXCLUSIVE);
+    }
+
+    public function writeLock(string $key, int $timeout = 0): ?string
+    {
+        return $this->doLock($key, $timeout, static::TYPE_WRITE);
+    }
+
+    public function readLock(string $key, int $timeout = 0): ?string
+    {
+        return $this->doLock($key, $timeout, static::TYPE_READ);
+    }
+
+    private function doLock(string $key, int $timeout = 0, string $mode = self::TYPE_EXCLUSIVE): ?string
+    {
         try {
-            $full_key = $this->getLockName($key);
+            $full_key = $this->getLockName($key, $mode);
             $lock_key = $this->createLockKey($full_key);
 
-            if (!$this->waitForLock($lock_key, $full_key, $timeout)) {
+            if (!$this->waitForLock($lock_key, $full_key, $timeout, $mode)) {
                 // Clean up
                 $this->zk->remove($lock_key);
                 return null;
@@ -77,13 +92,25 @@ class Lock
         return $key . '/' . $name;
     }
 
-    private function waitForLock(string $acquiredKey, string $baseKey, int $timeout): bool
+    private function waitForLock(string $acquiredKey, string $baseKey, int $timeout, string $mode): bool
     {
         $deadline = microtime(true) + $timeout;
-        $acquiredIndex = $this->getIndex($acquiredKey);
+
+        $nameFilter = $indexFilter = null;
+        $parent = dirname($baseKey);
+        switch ($mode) {
+            case static::TYPE_READ:
+                $nameFilter = $this->getLockName($parent, static::TYPE_WRITE);
+                break;
+            case static::TYPE_WRITE:
+            case static::TYPE_EXCLUSIVE:
+                $nameFilter = '';
+                $indexFilter = $this->getIndex($acquiredKey);
+                break;
+        }
 
         while (true) {
-            if (!$this->isCurrentlyLocked($baseKey, $acquiredIndex)) {
+            if (!$this->isCurrentlyLocked($baseKey, $indexFilter, $nameFilter)) {
                 return true;
             }
             if ($deadline <= microtime(true)) {
