@@ -78,7 +78,7 @@ class Lock
         $acquiredIndex = $this->getIndex($acquiredKey);
 
         while (true) {
-            if (!$this->isAnyLock($baseKey, $acquiredIndex)) {
+            if (!$this->isCurrentlyLocked($baseKey, $acquiredIndex)) {
                 return true;
             }
             if ($deadline <= microtime(true)) {
@@ -97,7 +97,7 @@ class Lock
         return intval(ltrim($matches[0], '0'));
     }
 
-    private function isAnyLock(string $baseKey, ?string $indexFilter = null, ?string $nameFilter = null): bool
+    private function isCurrentlyLocked(string $baseKey, ?string $indexFilter = null, ?string $nameFilter = null): bool
     {
         $parent = dirname($baseKey);
         if (!$this->zk->exists($parent)) {
