@@ -97,7 +97,7 @@ class Lock
         return intval($matches[0]);
     }
 
-    protected function isAnyLock(string $baseKey, ?string $indexFilter = null, ?string $nameFilter = null): bool
+    private function isAnyLock(string $baseKey, ?string $indexFilter = null, ?string $nameFilter = null): bool
     {
         $parent = dirname($baseKey);
         if (!$this->zk->exists($parent)) {
