@@ -63,4 +63,6 @@ interface ZookeeperInterface
      */
     public function getChildren(string $node, ?callable $watcherCallback = null): array;
 
+    public function ensurePath(string $node): bool;
+
 }

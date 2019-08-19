@@ -50,7 +50,7 @@ class Lock
      */
     private function createLockKey(string $key): string
     {
-        if (!$this->ensurePath($key)) {
+        if (!$this->zk->ensurePath($key)) {
             throw new Exception('Could not create parent node!');
         }
         $flags = ZkExt::EPHEMERAL | ZkExt::SEQUENCE;
@@ -70,23 +70,6 @@ class Lock
                 break;
         }
         return $key . '/' . $name;
-    }
-
-    private function ensurePath($node): bool
-    {
-        $parent = dirname($node);
-        try {
-            if ($this->zk->exists($parent)) {
-                return true;
-            }
-            if (!$this->ensurePath($parent)) {
-                return false;
-            }
-            $this->zk->create($parent, '');
-            return true;
-        } catch (Throwable $e) {
-            return false;
-        }
     }
 
     private function waitForLock(string $acquiredKey, string $baseKey, int $timeout): bool

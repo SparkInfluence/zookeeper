@@ -134,6 +134,23 @@ class Zookeeper implements ZookeeperInterface
         }
     }
 
+    public function ensurePath(string $node): bool
+    {
+        $parent = dirname($node);
+        try {
+            if ($this->zk->exists($parent)) {
+                return true;
+            }
+            if (!$this->ensurePath($parent)) {
+                return false;
+            }
+            $this->create($parent, '');
+            return true;
+        } catch (Throwable $e) {
+            return false;
+        }
+    }
+
     /**
      * @throws Throwable
      */
