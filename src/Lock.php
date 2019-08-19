@@ -89,7 +89,7 @@ class Lock
         return false;
     }
 
-    private function getIndex(string $key): ?string
+    private function getIndex(string $key): ?int
     {
         if (!preg_match("/[0-9]+$/", $key, $matches)) {
             return null;
@@ -97,7 +97,7 @@ class Lock
         return intval(ltrim($matches[0], '0'));
     }
 
-    private function isCurrentlyLocked(string $baseKey, ?string $indexFilter = null, ?string $nameFilter = null): bool
+    private function isCurrentlyLocked(string $baseKey, ?int $indexFilter = null, ?string $nameFilter = null): bool
     {
         $parent = dirname($baseKey);
         if (!$this->zk->exists($parent)) {
