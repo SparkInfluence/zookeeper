@@ -97,6 +97,18 @@ class Lock
         return intval(ltrim($matches[0], '0'));
     }
 
+    /**
+     * Check if the key is currently locked
+     *
+     * Providing an index filter will restrict the check to higher priority nodes (i.e. smaller numbers). If you use the
+     * default name filter (empty string), the nameFilter will be set to $baseKey. If a name filter is provided, the
+     * method will only match locks that share a base key name.
+     *
+     * @param string $baseKey
+     * @param int|null $indexFilter
+     * @param string|null $nameFilter
+     * @return bool
+     */
     private function isCurrentlyLocked(string $baseKey, ?int $indexFilter = null, ?string $nameFilter = ''): bool
     {
         $parent = dirname($baseKey);
