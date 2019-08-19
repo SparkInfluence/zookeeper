@@ -97,11 +97,14 @@ class Lock
         return intval(ltrim($matches[0], '0'));
     }
 
-    private function isCurrentlyLocked(string $baseKey, ?int $indexFilter = null, ?string $nameFilter = null): bool
+    private function isCurrentlyLocked(string $baseKey, ?int $indexFilter = null, ?string $nameFilter = ''): bool
     {
         $parent = dirname($baseKey);
         if (!$this->zk->exists($parent)) {
             return false;
+        }
+        if (is_string($nameFilter) && empty($nameFilter)) {
+            $nameFilter = $baseKey;
         }
         $children = $this->zk->getChildren($parent);
         foreach ($children as $childKey) {
