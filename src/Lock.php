@@ -43,6 +43,11 @@ class Lock
         }
     }
 
+    public function unlock(string $key): bool
+    {
+        return $this->zk->remove($key);
+    }
+
     /**
      * @param string $key
      * @return string
