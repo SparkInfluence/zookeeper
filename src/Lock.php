@@ -94,7 +94,7 @@ class Lock
         if (!preg_match("/[0-9]+$/", $key, $matches)) {
             return null;
         }
-        return intval($matches[0]);
+        return intval(ltrim($matches[0], '0'));
     }
 
     private function isAnyLock(string $baseKey, ?string $indexFilter = null, ?string $nameFilter = null): bool
