@@ -18,6 +18,8 @@ RUN set -eux; \
         netcat \
         wget; \
     pecl install zookeeper; \
+    yes | pecl install xdebug; \
+    echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini; \
     docker-php-ext-enable zookeeper; \
     groupadd -r zookeeper --gid=1011; \
     useradd -r -g zookeeper --uid=1011 zookeeper; \
