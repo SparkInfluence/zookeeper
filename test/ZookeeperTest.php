@@ -90,6 +90,34 @@ class ZookeeperTest extends TestCase
         $this->assertEqualsCanonicalizing($children, $this->zookeeper->getChildren('/testGetChildren'));
     }
 
+    public function testGetChildrenWatcherOnRemove()
+    {
+        $this->zookeeper->ensurePath('/testGetChildren/watcher/1');
+        $ranListener = false;
+        $this->zookeeper->create('/testGetChildren/watcher/node', '1');
+        $this->zookeeper->getChildren('/testGetChildren/watcher', function ($type) use (&$ranListener) {
+            $ranListener = true;
+            $this->assertEquals(\Zookeeper::CHILD_EVENT, $type);
+        });
+        $this->zookeeper->remove('/testGetChildren/watcher/node');
+        zookeeper_dispatch();
+        $this->assertTrue($ranListener);
+    }
+
+    public function testGetChildrenWatcherOnCreate()
+    {
+        $this->zookeeper->ensurePath('/testGetChildren/watcher2/1');
+        $ranListener = false;
+        $this->zookeeper->create('/testGetChildren/watcher2/node', '1');
+        $this->zookeeper->getChildren('/testGetChildren/watcher2', function ($type) use (&$ranListener) {
+            $ranListener = true;
+            $this->assertEquals(\Zookeeper::CHILD_EVENT, $type);
+        });
+        $this->zookeeper->create('/testGetChildren/watcher2/node2', '1');
+        zookeeper_dispatch();
+        $this->assertTrue($ranListener);
+    }
+
     public function testGetChildrenThrowsErrorOnFalse()
     {
         $ext = Mockery::mock('Zookeeper');
