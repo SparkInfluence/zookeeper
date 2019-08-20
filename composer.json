@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "SparkInfluence\\Zookeeper\\": "./src"
+      "SparkInfluence\\Zookeeper\\": "src"
     }
   },
   "require-dev": {
@@ -24,7 +24,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "SparkInfluence\\Zookeeper\\Tests\\": "./test"
+      "SparkInfluence\\Zookeeper\\Tests\\": "test"
     }
   }
 }
