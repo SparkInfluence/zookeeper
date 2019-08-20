@@ -79,6 +79,26 @@ class ZookeeperTest extends TestCase
         $this->assertEquals('Bazbat', $this->zookeeper->get('/testSet'));
     }
 
+    public function testGetChildren()
+    {
+        $this->zookeeper->ensurePath('/testGetChildren/1');
+        $this->assertEquals([], $this->zookeeper->getChildren('/testGetChildren'));
+        $children = ['foo', 'bar', 'baz', 'bat', 'qwerty', 'bim', 'bam'];
+        foreach ($children as $child) {
+            $this->zookeeper->create("/testGetChildren/$child", '1');
+        }
+        $this->assertEqualsCanonicalizing($children, $this->zookeeper->getChildren('/testGetChildren'));
+    }
+
+    public function testGetChildrenThrowsErrorOnFalse()
+    {
+        $ext = Mockery::mock('Zookeeper');
+        $ext->shouldReceive('getChildren')->andReturn(false);
+        $zk = new Zookeeper($ext);
+        $this->expectException(NodeError::class);
+        $zk->getChildren('/qwerty');
+    }
+
     public function testExists()
     {
         $this->assertFalse($this->zookeeper->exists('/testNode'));
