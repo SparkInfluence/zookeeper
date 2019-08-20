@@ -87,6 +87,20 @@ class ZookeeperTest extends TestCase
         $this->zookeeper->remove('/testNode');
     }
 
+    public function testExistsWatcher()
+    {
+        $this->zookeeper->ensurePath('/testExists/watcher/node');
+        $ranListener = false;
+        $this->zookeeper->exists('/testExists/watcher', function ($type, $_, $path) use (&$ranListener) {
+            $ranListener = true;
+            $this->assertEquals('/testExists/watcher', $path);
+            $this->assertEquals(\Zookeeper::CHANGED_EVENT, $type);
+        });
+        $this->zookeeper->set('/testExists/watcher', '2');
+        zookeeper_dispatch();
+        $this->assertTrue($ranListener);
+    }
+
     public function testRemove()
     {
         $this->zookeeper->create('/foobar', '');
