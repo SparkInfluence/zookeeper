@@ -10,7 +10,7 @@ if ! zkServer.sh status > /dev/null 2>&1 ; then
 fi
 
 exitcode=2
-if vendor/bin/phpunit; then
+if vendor/bin/phpunit "$@"; then
   exitcode=0
 fi
 
