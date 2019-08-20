@@ -2,8 +2,10 @@
 
 namespace SparkInfluence\Zookeeper\Tests;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use SparkInfluence\Zookeeper\Lock;
+use SparkInfluence\Zookeeper\Zookeeper;
 
 class LockTest extends TestCase
 {
@@ -33,6 +35,14 @@ class LockTest extends TestCase
         $this->assertNull($lock->lock($toLock));
         $lock->unlock($key1);
         $this->assertNotNull($lock->lock($toLock));
+    }
+
+    public function testLockCatchesExceptions()
+    {
+        $zk = Mockery::mock(Zookeeper::class);
+        $zk->shouldReceive('ensurePath')->andReturn(false);
+        $lock = new Lock($zk);
+        $this->assertNull($lock->lock('/lockTest2/noLock'));
     }
 
     public function testWriteLockBlocksLock()
