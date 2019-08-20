@@ -10,7 +10,4 @@
             <directory>src</directory>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-clover" target="/plugin/clover.xml"/>
-    </logging>
 </phpunit>
