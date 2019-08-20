@@ -26,5 +26,8 @@
     "psr-4": {
       "SparkInfluence\\Zookeeper\\Tests\\": "test"
     }
+  },
+  "scripts": {
+    "test": "docker run --rm -v $(pwd):/plugin sparkinfluence/zookeeper-test"
   }
 }
