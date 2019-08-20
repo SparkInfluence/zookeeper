@@ -2,9 +2,12 @@
 
 namespace SparkInfluence\Zookeeper\Tests;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 use SparkInfluence\Zookeeper\Exception\Exception;
+use SparkInfluence\Zookeeper\Exception\NodeError;
 use SparkInfluence\Zookeeper\Zookeeper;
+use ZookeeperException;
 
 class ZookeeperTest extends TestCase
 {
@@ -20,6 +23,39 @@ class ZookeeperTest extends TestCase
     public function init()
     {
         $this->zookeeper = new Zookeeper(static::$zk);
+    }
+
+    public function testCreate()
+    {
+        $this->assertFalse($this->zookeeper->exists('/testCreate'));
+        $this->zookeeper->create('/testCreate', 'This is a test');
+        $this->assertTrue($this->zookeeper->exists('/testCreate'));
+        $this->assertEquals('This is a test', $this->zookeeper->get('/testCreate'));
+    }
+
+    public function testCreateProxiesExceptions()
+    {
+        $ext = Mockery::mock('Zookeeper');
+        $exception = new ZookeeperException();
+        $ext->shouldReceive('create')->andThrow($exception);
+        $zk = new Zookeeper($ext);
+        $this->expectException(Exception::class);
+        $zk->create('/whatever', '');
+    }
+
+    public function testGet()
+    {
+        $this->zookeeper->create('/testGet', 'Lorem Ipsum');
+        $this->assertEquals('Lorem Ipsum', $this->zookeeper->get('/testGet'));
+    }
+
+    public function testGetThrowsErrorOnFalse()
+    {
+        $ext = Mockery::mock('Zookeeper');
+        $ext->shouldReceive('get')->andReturn(false);
+        $zk = new Zookeeper($ext);
+        $this->expectException(NodeError::class);
+        $zk->get('/qwerty');
     }
 
     public function testExists()
