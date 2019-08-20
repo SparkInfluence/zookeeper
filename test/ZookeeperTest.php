@@ -49,6 +49,20 @@ class ZookeeperTest extends TestCase
         $this->assertEquals('Lorem Ipsum', $this->zookeeper->get('/testGet'));
     }
 
+    public function testGetWatcher()
+    {
+        $this->zookeeper->ensurePath('/testGet/path');
+        $ranListener = false;
+        $this->zookeeper->get('/testGet', function ($eventType, $_, $path) use (&$ranListener) {
+            $ranListener = true;
+            $this->assertEquals($eventType, \Zookeeper::CHANGED_EVENT);
+            $this->assertEquals($path, '/testGet');
+        });
+        $this->zookeeper->set('/testGet', '2');
+        zookeeper_dispatch();
+        $this->assertTrue($ranListener);
+    }
+
     public function testGetThrowsErrorOnFalse()
     {
         $ext = Mockery::mock('Zookeeper');
