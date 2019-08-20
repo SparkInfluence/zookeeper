@@ -17,9 +17,13 @@ class ConnectionTest extends TestCase
 
     public function testConnectionError()
     {
+        $mock = \Mockery::mock('Zookeeper');
+        $mock->shouldReceive('connect');
+        $mock->shouldReceive('getState')->andReturn(\Zookeeper::CONNECTING_STATE);
+        $zookeeper = new Zookeeper($mock);
         $this->expectException(ConnectionError::class);
         $this->expectExceptionMessage('Could not connect to zookeeper server');
-        Zookeeper::connection('dev.sparkinfluence.net:80');
+        $zookeeper->connect('localhost:2181');
     }
 
 }
