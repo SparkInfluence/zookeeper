@@ -114,7 +114,7 @@ class Lock
                 return true;
             }
             if ($deadline <= microtime(true)) {
-                return false;
+                break;
             }
             usleep(100000); // sleep for a tenth of a second
         }
