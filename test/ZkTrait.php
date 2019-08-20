@@ -27,8 +27,18 @@ trait ZkTrait
      */
     public static function initializeZookeeper()
     {
-        static::$zk = new ZkExt();
-        static::$zk->connect('localhost:2181');
+        $zk = new ZkExt();
+        $className = array_reverse(explode('\\', static::class))[0];
+        $zk->connect('localhost:2181');
+        $zk->create(
+            '/' . $className,
+            '1',
+            [["perms" => ZkExt::PERM_ALL, "scheme" => "world", "id" => "anyone"]]
+        );
+        $zk->close();
+        $zk = new ZkExt();
+        $zk->connect('localhost:2181/' . $className);
+        static::$zk = $zk;
     }
 
 }
