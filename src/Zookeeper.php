@@ -11,19 +11,12 @@ class Zookeeper implements ZookeeperInterface
 
     /** @var ZkExt */
     private $zk;
-    /** @var string */
-    private $basePath;
 
     private static $instances = [];
 
-    public function __construct(ZkExt $zk, string $basePath = '')
+    public function __construct(ZkExt $zk)
     {
         $this->zk = $zk;
-        try {
-            $this->basePath = $this->formatNodePath($basePath);
-        } catch (Throwable $e) {
-            $this->basePath = '';
-        }
     }
 
     /**
@@ -178,7 +171,7 @@ class Zookeeper implements ZookeeperInterface
      */
     private function formatNodePath(string $node): string
     {
-        $node = trim($this->basePath, '/') . '/' . trim($node, '/');
+        $node = trim($node, '/');
         // regex to find invalid characters
         $pattern = '/' .
             '[' . // Start range match

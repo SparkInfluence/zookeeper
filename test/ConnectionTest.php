@@ -22,15 +22,4 @@ class ConnectionTest extends TestCase
         Zookeeper::connection('dev.sparkinfluence.net:80');
     }
 
-    public function testConstructorCatchesBasePathErrors()
-    {
-        $zk = new \Zookeeper();
-        $z = new Zookeeper($zk, '/test/zookeeper');
-        $p = new \ReflectionProperty($z, 'basePath');
-        $p->setAccessible(true);
-        $this->assertEquals('', $p->getValue($z));
-        $z = new Zookeeper($zk, '/test/valid');
-        $this->assertEquals('/test/valid', $p->getValue($z));
-    }
-
 }
