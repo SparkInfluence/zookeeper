@@ -85,4 +85,13 @@ class LockTest extends TestCase
         $this->assertLessThanOrEqual(1, time() - $after);
     }
 
+    public function testNonLockNodesDoNotBlockLock()
+    {
+        $lock = new Lock($this->zookeeper);
+        $toLock = '/lockTest6/lock';
+        $this->zookeeper->ensurePath("$toLock/1");
+        $this->zookeeper->create("$toLock/lock-", 'Testing');
+        $this->assertNotNull($lock->lock($toLock));
+    }
+
 }
