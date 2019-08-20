@@ -2,14 +2,13 @@
 
 namespace SparkInfluence\Zookeeper\Tests;
 
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use SparkInfluence\Zookeeper\Lock;
 
 class LockTest extends TestCase
 {
 
-    use ZkTrait, MockeryPHPUnitIntegration;
+    use ZkTrait;
 
     public function testLock()
     {

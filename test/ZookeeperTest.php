@@ -3,7 +3,6 @@
 namespace SparkInfluence\Zookeeper\Tests;
 
 use Mockery;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use SparkInfluence\Zookeeper\Exception\Exception;
 use SparkInfluence\Zookeeper\Exception\NodeError;
@@ -13,7 +12,7 @@ use ZookeeperException;
 class ZookeeperTest extends TestCase
 {
 
-    use ZkTrait, MockeryPHPUnitIntegration;
+    use ZkTrait;
 
     public function testCreate()
     {
