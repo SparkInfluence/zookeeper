@@ -94,4 +94,13 @@ class LockTest extends TestCase
         $this->assertNotNull($lock->lock($toLock));
     }
 
+    public function testIsLocked()
+    {
+        $lock = new Lock($this->zookeeper);
+        $toLock = '/lockTest7/isLocked';
+        $this->assertFalse($lock->isLocked($toLock));
+        $lock->lock($toLock);
+        $this->assertTrue($lock->isLocked($toLock));
+    }
+
 }

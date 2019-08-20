@@ -63,6 +63,12 @@ class Lock
         return $this->zk->remove($key);
     }
 
+    public function isLocked(string $key, string $mode = 'exclusive')
+    {
+        $lockName = $this->getLockName($key);
+        return !$this->waitForLock($lockName, $lockName, 0, $mode);
+    }
+
     /**
      * @param string $key
      * @return string
