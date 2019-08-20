@@ -30,7 +30,7 @@ trait ZkTrait
         $zk = new ZkExt();
         $className = array_reverse(explode('\\', static::class))[0];
         $zk->connect('localhost:2181');
-        $zk->create(
+        $zk->exists('/' . $className) || $zk->create(
             '/' . $className,
             '1',
             [["perms" => ZkExt::PERM_ALL, "scheme" => "world", "id" => "anyone"]]
