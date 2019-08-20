@@ -142,7 +142,7 @@ class Zookeeper implements ZookeeperInterface
                 return true;
             }
             if (!$this->ensurePath($parent)) {
-                return false;
+                return false; // @codeCoverageIgnore
             }
             $this->create($parent, '');
             return true;
