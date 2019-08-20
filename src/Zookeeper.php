@@ -40,7 +40,7 @@ class Zookeeper implements ZookeeperInterface
             if ($this->isConnected()) {
                 break;
             }
-            if ($counter === 10) {
+            if ($counter === 6) {
                 throw new ConnectionError('Could not connect to zookeeper server', $this->getState() ?: 255);
             }
             usleep($interval * 1000);

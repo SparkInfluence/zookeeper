@@ -3,6 +3,7 @@
 namespace SparkInfluence\Zookeeper\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SparkInfluence\Zookeeper\Exception\ConnectionError;
 use SparkInfluence\Zookeeper\Zookeeper;
 
 class ConnectionTest extends TestCase
@@ -12,6 +13,13 @@ class ConnectionTest extends TestCase
     {
         $zookeeper = Zookeeper::connection('localhost:2181');
         $this->assertNotEmpty($zookeeper);
+    }
+
+    public function testConnectionError()
+    {
+        $this->expectException(ConnectionError::class);
+        $this->expectExceptionMessage('Could not connect to zookeeper server');
+        Zookeeper::connection('dev.sparkinfluence.net:80');
     }
 
 }
