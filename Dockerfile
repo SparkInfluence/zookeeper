@@ -28,7 +28,6 @@ RUN set -eux; \
     groupadd -r zookeeper --gid=1011; \
     useradd -r -g zookeeper --uid=1011 zookeeper; \
     chown -R zookeeper:zookeeper /zk/; \
-    rm -rf /var/lib/apt/lists/*; \
     wget -q "https://www.apache.org/dist/zookeeper/$SHORT_DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
     wget -q "https://www.apache.org/dist/zookeeper/$SHORT_DISTRO_NAME/$DISTRO_NAME.tar.gz.asc"; \
     gpg --batch --verify "$DISTRO_NAME.tar.gz.asc" "$DISTRO_NAME.tar.gz"; \
@@ -47,7 +46,9 @@ RUN set -eux; \
     echo 'admin.enableServer=false' >> /zk/conf/zoo.cfg; \
     echo 'clientPort=2181' >> /zk/conf/zoo.cfg; \
     chown -R zookeeper:zookeeper "/zk" "/plugin" "/$DISTRO_NAME"; \
-    chmod +x docker-entrypoint.sh
+    chmod +x docker-entrypoint.sh; \
+    apt-get purge -y wget gnupg; \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PATH=$PATH:/$DISTRO_NAME/bin \
     ZOOCFGDIR=/zk/conf \
