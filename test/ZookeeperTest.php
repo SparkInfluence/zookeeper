@@ -14,17 +14,6 @@ class ZookeeperTest extends TestCase
 
     use ZkTrait;
 
-    /** @var Zookeeper */
-    private $zookeeper;
-
-    /**
-     * @before
-     */
-    public function init()
-    {
-        $this->zookeeper = new Zookeeper(static::$zk);
-    }
-
     public function testCreate()
     {
         $this->assertFalse($this->zookeeper->exists('/testCreate'));
