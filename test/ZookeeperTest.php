@@ -58,6 +58,13 @@ class ZookeeperTest extends TestCase
         $zk->get('/qwerty');
     }
 
+    public function testSet()
+    {
+        $this->zookeeper->create('/testSet', 'Foobar');
+        $this->assertTrue($this->zookeeper->set('/testSet', 'Bazbat'));
+        $this->assertEquals('Bazbat', $this->zookeeper->get('/testSet'));
+    }
+
     public function testExists()
     {
         $this->assertFalse($this->zookeeper->exists('/testNode'));
