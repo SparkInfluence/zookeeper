@@ -1,0 +1,7 @@
+/doc              export-ignore
+/test             export-ignore
+/.gitattributes   export-ignore
+/.gitignore       export-ignore
+/.psysh.php       export-ignore
+/Dockerfile       export-ignore
+/phpunit.xml.dist export-ignore
