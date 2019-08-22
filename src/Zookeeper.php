@@ -131,7 +131,7 @@ class Zookeeper implements ZookeeperInterface
     {
         $parent = dirname($node);
         try {
-            if ($this->zk->exists($parent)) {
+            if ($this->exists($parent)) {
                 return true;
             }
             if (!$this->ensurePath($parent)) {
