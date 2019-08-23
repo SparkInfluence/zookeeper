@@ -129,7 +129,7 @@ class Zookeeper implements ZookeeperInterface
 
     public function ensurePath(string $node): bool
     {
-        $parent = dirname($node);
+        $parent = dirname('/' . trim($node, '/'));
         try {
             if ($this->exists($parent)) {
                 return true;
