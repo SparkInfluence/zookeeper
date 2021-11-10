@@ -25,6 +25,7 @@ class Zookeeper implements ZookeeperInterface
      */
     public function connect(string $zookeeperHost, callable $watcherCallback = null, int $timeout = 10000)
     {
+        $zookeeperHost = trim($zookeeperHost, '/');
         $this->close();
         $counter = 0;
         $interval = 50; // Interval in milliseconds to check. Will double every time the connection couldn't be established
@@ -202,6 +203,7 @@ class Zookeeper implements ZookeeperInterface
      */
     public static function connection(string $host, ?callable $callback = null, int $timeout = 10000): self
     {
+        $host = trim($host, '/');
         $instance = self::$instances[$host] ?? false;
         if (!$instance) {
             $zk = new ZkExt();
